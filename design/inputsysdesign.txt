@@ -1,0 +1,37 @@
+Input_System
+
+::fndr namespace::
+functions:
+	Input_System(); // errcode = 0
+	int parseString();
+	bool isCommand(std::string&);
+	bool validSetting(std::string&);
+	std::string stripSpaces(std::string);
+	bool isInt(std::string&);
+	std::string makelower(std::string&);
+	INPUT_STATE getState();
+
+data members:
+	INPUT_STATE cur_state;
+	ColorMode curColor;
+
+	int err_code;   
+`	//0 - good
+	//1 - bad command
+	//2 - bad file name
+	//3 - bad setting name
+	//4 - unknown error
+
+	static const int d_setting_size = 6;
+	static const int l_setting_size = 2;
+
+	std::string disp_setting[d_setting_size] = {
+		"a", "all", "m", "more", "s", "simple"
+	};
+	std::string load_setting[l_setting_size] = {
+		"810", "850"
+	};
+
+::spltr namespace::
+functions:
+	void breakup(std::string);

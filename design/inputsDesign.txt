@@ -1,0 +1,34 @@
+User_input
+
+
+::Finder_input::
+functions:
+	Input_System(std::string); //set full string
+	void setInputString(std::string);
+	void storeSetting(std::string&);
+	void storeQuery(std::string&);
+	void storeFileName(std::string&);
+	Input_Package getPackage();
+	void printInput();
+
+data members:
+	std::string full_str;
+	Input_Package pack;
+
+
+::Splitter_input::
+functions:
+	Input();
+	Input(std::string); //ctor
+	Input(Input&); //cptor
+	void store(std::string);
+	int getCount();
+	void clrdata();
+	void printData();
+	std::string operator[](int) const;
+	Input operator=(std::string);
+	bool operator==(std::string);
+
+data members;	
+	std::vector<std::string>data;
+	int d_count;

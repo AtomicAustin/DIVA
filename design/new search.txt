@@ -1,0 +1,28 @@
+load [filename] -[library]
+load [filename]
+load -[library]
+
+make two different library / file to_return vectors
+
+find [query]
+	.search file
+	.match file data with library definiton
+	.search library
+	.display
+
+clear [library/file]
+	.clear the loaded library or file
+	
+check if file is loaded
+	.search file
+	check if library is loaded
+		.find match
+		.search library
+
+if(find file value)
+	find library match
+	find library value
+	
+else if(find library value)
+	find file match
+	find file value

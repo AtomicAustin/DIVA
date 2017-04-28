@@ -1,0 +1,31 @@
+::Finder About::
+The Finder Tool allows you to [load] an EDI document and [find] various values 
+in the document or it's document type. You can query definitons of 
+elements/segments as defined by the X12 EDI standard or known elements/segments
+contained in the document you loaded.
+For example, if you want to examine an 810 invoice, simply load the 810, then 
+search for any values you want by definition or file values.
+Acceptable Queries include:
+find N9		*Returns the full line of all instances of the ISA segment*
+find CUR > USD 	*will look only at the CUR segment for the USD value*
+find Date Time Reference *Will return the library definitions as defined by the
+X12 EDI standard*
+
+::Finder Manual::
+The finder tool has two main commands - Load and Find.
+Load will load any EDI document and it's respective library
+Find will search the loaded document for a value or definition
+Both commands have settings the user may invoke, all settings must begin with
+the '-' character.
+
+load [filename] -[810/850]
+	.The load command's setting is MANDATORY - you will recieve an error 
+	 if it's not included.
+	.As of now, all documents to load must be .txt files.
+
+find [value/definition] -[(a)ll/(m)ore/(s)imple] -[#]
+	.The first setting in this example is the OPTIONAL display setting. 
+	 The SIMPLE setting is chosen by default.
+	.The second setting in this example is the OPTIONAL number to display 
+	 setting. This value must be a number > 0 and specifies how many 
+	 results to display. 

@@ -1,0 +1,36 @@
+issues
+when searching "Definiton" *element*:
+	-5 results are found
+	-storing file line gives invalid segment index -1 of returned element number 0,1,2,3,4
+	-displaying the file indexes gives line 0, position -1
+when searching "Lead Time" *segment*:
+	-1 entry
+	-position is -1
+	-same issue as above
+Display:
+	-when displaying a segment - it's position is 0
+	-when displaying an element it's positin is index + 1
+	-make so if segment was returned, print line only
+find NTE:
+	-could not find query as value or in library
+find DESCRIPTION:
+	-could not find query as value or in library
+	-fix case sensitivity
+find Note Reference Code:
+	-same issue with position = -1
+find Release Number -a:
+	-same position issue
+	-does not display anything for file seg/element: or line:
+find CUR > USD:
+	-tries to search for CUR < CUR
+	-could not find query as value or in library
+find Reference Number > ZZ:
+	-query 'Reference NumberReference Number' returned 3 entries
+	-found library elements = Reference Number
+find N9 > Reference Number:
+	-could not find N9 < N9
+find Lead Time > Quantity
+	-could not find Lead Time < Lead Time
+find * or >:
+	- > gets changed to < 
+	- * and > don't return but should note that they're reserved
