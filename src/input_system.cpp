@@ -14,6 +14,9 @@ Input_System::Input_System()
 }
 int Input_System::parseString(Finder_Input& inp)
 {
+	err_code = 0;
+	err_str = "";
+
 	std::string full_str = inp.getfullStr();
 
 	if (isCommand(full_str))
@@ -77,7 +80,8 @@ void Input_System::getSetting(std::string& in, Finder_Input& inp)
 		{
 			if (first == std::string::npos)
 			{
-				curColor.ovrd_color("RED", in + " Does not contain a valid setting");
+				err_str = in + " Does not contain a valid setting";
+				//curColor.ovrd_color("RED", in + " Does not contain a valid setting");
 				return;
 			}
 			if (in[first - 1] != ' ')
@@ -86,7 +90,8 @@ void Input_System::getSetting(std::string& in, Finder_Input& inp)
 
 				if (first == std::string::npos) 
 				{
-					curColor.ovrd_color("RED", in + " Does not contain a valid setting");
+					err_str = in + " Does not contain a valid setting";
+					//curColor.ovrd_color("RED", in + " Does not contain a valid setting");
 					return;
 				}
 			}
@@ -120,12 +125,13 @@ void Input_System::getSetting(std::string& in, Finder_Input& inp)
 		if (!validSetting(makelower(stripSpaces(setting)), inp))
 		{
 			err_code = 3;
-			curColor.ovrd_color("RED", "Unrecognized setting: [" + setting + "]");
+			err_str = "Unrecognized setting: [" + setting + "]";
+			//curColor.ovrd_color("RED", "Unrecognized setting: [" + setting + "]");
 		}
 
-		if (cur_state == fndr::FIND) {
+		//if (cur_state == fndr::FIND) {
 			getSetting(in, inp);
-		}
+		//}
 	}
 	else {
 		curColor.ovrd_color("YELLOW", "No settings found.");
@@ -168,28 +174,43 @@ bool Input_System::validSetting(std::string& in, Finder_Input& inp)
 				}
 				else 
 				{
-					curColor.ovrd_color("RED", num + " must be greater than zero");
+					err_str = num + " must be greater than zero";
+					//curColor.ovrd_color("RED", num + " must be greater than zero");
 					break;
 				}
 
 				return true;
 			}
 
-			curColor.ovrd_color("RED", "Invalid find setting [" + in + "]");
+			err_str = "Invalid find setting [" + in + "]";
+			//curColor.ovrd_color("RED", "Invalid find setting [" + in + "]");
 			break;
 		}
 		case fndr::LOAD:
 		{
-			for (int i = 0; i < l_setting_size; i++)
+			if (isInt(in))
 			{
-				if (in == load_setting[i]) 
+				for (int i = 0; i < l_setting_size; i++)
 				{
-					inp.storeFileType(in);
-					return true;
+					if (in == load_setting[i]){
+						inp.storeFileType(in);
+						return true;
+					}
 				}
+				err_str = "Invalid load setting [" + in + "]";
+			}
+			else
+			{
+				for (int i = 0; i < s_char_size; i++)
+				{
+					if (in == spec_char[i]) {
+						inp.storeDelimiter(in);
+						return true;
+					}
+				}
+				err_str = "Invalid delimiter [" + in + "]";
 			}
 
-			curColor.ovrd_color("RED", "Invalid load setting [" + in + "]");
 			break;
 		}
 	}
@@ -220,7 +241,8 @@ void Input_System::getQuery(std::string &in, Finder_Input& inp)
 			else 
 			{
 				err_code = 4;
-				curColor.ovrd_color("RED", to_store + " is an invalid character, please use a different query.");
+				err_str = to_store + " is an invalid character, please use a different query.";
+				//curColor.ovrd_color("RED", to_store + " is an invalid character, please use a different query.");
 			}
 		}
 		else 
@@ -239,7 +261,8 @@ void Input_System::getQuery(std::string &in, Finder_Input& inp)
 	else 
 	{
 		err_code = 4;
-		curColor.ovrd_color("RED", to_store + " is an invalid character, please use a different query.");
+		err_str = to_store + " is an invalid character, please use a different query.";
+		//curColor.ovrd_color("RED", to_store + " is an invalid character, please use a different query.");
 	}
 }
 void Input_System::getFilename(std::string &in, Finder_Input& inp)
@@ -256,11 +279,9 @@ void Input_System::getFilename(std::string &in, Finder_Input& inp)
 		in += ".txt";
 	}
 
-	if (in.substr(0, 6) != "files/") {
-		in = "files/" + in;
-	}
+	//in = inp.getPackage().filepath + in;
 
-	std::ifstream tryfile(in.c_str());
+	std::ifstream tryfile(stripSpaces(inp.getPackage().filepath) + stripSpaces(in));
 
 	if (tryfile.is_open())
 	{
@@ -270,8 +291,13 @@ void Input_System::getFilename(std::string &in, Finder_Input& inp)
 	else
 	{
 		err_code = 2;
-		curColor.ovrd_color("RED", "Could not open file with name: [" + in + "]");
+		err_str = "Could not open file with name: [" + inp.getPackage().filepath + "][" + in + "]";
+		//curColor.ovrd_color("RED", "Could not open file with name: [" + in + "]");
 	}
+}
+std::string Input_System::getError()
+{
+	return err_str;
 }
 std::string Input_System::stripSpaces(std::string in)
 {

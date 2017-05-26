@@ -5,6 +5,7 @@ Search_System::Search_System()
 	//ctor
 	file_loaded = false;
 	library_loaded = false;
+	disp_delimiter = "*";
 }
 void Search_System::loadFiles(Input_Package in_pack)
 {
@@ -54,6 +55,7 @@ void Search_System::findQuery(Input_Package in_pack)
 		curColor.ovrd_color("RED", "No query given. Retry Find command");
 		return;
 	}
+
 				//Check the FILE data for the query
 	if (!checkValue(in_pack, file_data, file_data_size, "FILE"))
 	{
@@ -110,6 +112,7 @@ bool Search_System::checkValue(Input_Package in, std::vector<Doc_Value>& data, i
 
 	int num_to_display = in.settings.display_num;
 	bool found = false;
+	bool stored = false;
 
 	//AMOUNT OF QUERIES TO SEARCH FOR (either 1 or 2)
 	//indexed as 1 = 0, 2 = 1
@@ -127,7 +130,7 @@ bool Search_System::checkValue(Input_Package in, std::vector<Doc_Value>& data, i
 		{
 			if (in.q_count == 1)
 			{
-				found = storeValues(new_val, seg_typ, data[i], i, -1);
+				stored = storeValues(new_val, seg_typ, data[i], i, -1);
 
 				//std::cout << "1 query: Breaking" << std::endl;
 				j = data[i].ele_count;
@@ -147,14 +150,14 @@ bool Search_System::checkValue(Input_Package in, std::vector<Doc_Value>& data, i
 				if (in.m_query[1] == data[i].elements[j])
 				{
 					//chained query element found
-					found = storeValues(new_val, ele_typ, data[i], i, j);
+					stored = storeValues(new_val, ele_typ, data[i], i, j);
 					break;
 				}
 			}
 			else if (in.m_query[0] == data[i].elements[j])
 			{
 				//FOUND ELEMENT
-				found = storeValues(new_val, ele_typ, data[i], i, j);
+				stored = storeValues(new_val, ele_typ, data[i], i, j);
 				break;
 			}
 			j++;
@@ -166,13 +169,13 @@ bool Search_System::checkValue(Input_Package in, std::vector<Doc_Value>& data, i
 
 		i++;
 
-		if (found)
+		if (stored)
 		{
 			//std::cout << "Segment or element was found, storing" << std::endl;
 
 			to_return.push_back(new_val);
 
-			found = false;
+			stored = false;
 
 			num_to_display--;
 		}
@@ -181,14 +184,14 @@ bool Search_System::checkValue(Input_Package in, std::vector<Doc_Value>& data, i
 		{
 			if (to_return.size() > 0) 
 			{
-				found = true;
+				return true;
 				//std::cout << "No more to display, breaking" << std::endl;
-				break;
+				//break;
 			}
 		}
 	}//end while i < data size
 
-	return found;
+	return false;
 }
 bool Search_System::storeValues(Found_Value& n_val, Data_Type in_type, Doc_Value f_val, int seg_indx, int ele_indx)
 {
@@ -350,7 +353,7 @@ void Search_System::storeFileLine()
 
 			for (int j = 0; j < cur_line.ele_count; j++)
 			{
-				elementPiece = "*" + cur_line.elements[j];
+				elementPiece = disp_delimiter + cur_line.elements[j];
 				to_return[i].full_line += elementPiece;
 				to_return[i].file_seg_element_count++;
 			}
@@ -387,7 +390,7 @@ void Search_System::storeLibraryDefinition()
 
 			for (int j = 0; j < cur_line.ele_count; j++)
 			{
-				elementPiece = "*" + cur_line.elements[j];
+				elementPiece = disp_delimiter + cur_line.elements[j];
 
 				to_return[i].library_definition += elementPiece;
 			}

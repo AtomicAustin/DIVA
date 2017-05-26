@@ -3,23 +3,27 @@
 FileLoader::FileLoader()
 {
 	//ctor
-	_850library = "files/850LIBRARY.txt";
 	_810library = "files/810LIBRARY.txt";
+	_850library = "files/850LIBRARY.txt";
+	_855library = "files/855LIBRARY.txt";
+	_856library = "files/856LIBRARY.txt";
+	_857library = "files/857LIBRARY.txt";
 	ufile = "NOSTRING";
+	delimiter = "*";
 }
 std::vector<Doc_Value> FileLoader::loadFile(Input_Package in)
 {
 	curColor.ovrd_color("YELLOW", "Loading File...");
 
-	std::vector<Doc_Value>   file_data;
+	std::vector<Doc_Value> file_data;
 
-	std::string fileName = in.filename;
+	delimiter = in.delimiter;
 	std::string line = "";
 	std::string SEG  = "";
-	int			SEG_POS = 0;
-	int         lineNum = 0;
+	int SEG_POS = 0;
+	int lineNum = 0;
 
-	std::ifstream rfile(fileName.c_str());
+	std::ifstream rfile(stripSpaces(in.filepath) + stripSpaces(in.filename));
 
 	if (rfile.is_open())
 	{
@@ -30,7 +34,7 @@ std::vector<Doc_Value> FileLoader::loadFile(Input_Package in)
 			lineNum++;
 			//line = removeTabs(line);
 
-			SEG_POS = line.find("*", 0);
+			SEG_POS = line.find(delimiter, 0);
 
 			//std::cout << "SEGMENT: [" << line.substr(0, SEG_POS) << "]" << std::endl;
 			SEG = line.substr(0, SEG_POS);
@@ -46,7 +50,7 @@ std::vector<Doc_Value> FileLoader::loadFile(Input_Package in)
 		rfile.close();
 	}
 	else {
-		curColor.ovrd_color("RED", "Could not open file [" + fileName + "]");
+		curColor.ovrd_color("RED", "Could not open file [" + in.filepath + in.filename + "]");
 	}
 
 	return file_data;
@@ -66,6 +70,15 @@ std::vector<Doc_Value> FileLoader::loadLibrary(Input_Package in)
 	else if (fileType == "850") {
 		fileName = _850library;
 	}
+	else if (fileType == "855") {
+		fileName = _855library;
+	}
+	else if (fileType == "856") {
+		fileName = _856library;
+	}
+	else if (fileType == "857") {
+		fileName = _857library;
+	}
 	else 
 	{
 		curColor.ovrd_color("RED", "Bad File Type [" + fileType + "]");
@@ -78,6 +91,7 @@ std::vector<Doc_Value> FileLoader::loadLibrary(Input_Package in)
 	std::string SEG = "";
 	int         SEG_POS = 0;
 	int         lineNum = 0;
+	delimiter = "*";
 
 	std::ifstream rfile(fileName.c_str());
 
@@ -116,7 +130,7 @@ std::vector<Doc_Value> FileLoader::loadLibrary(Input_Package in)
 }
 Doc_Value FileLoader::storeElements(std::string& n, Doc_Value dv)
 {
-	int first = n.find("*");
+	int first = n.find(delimiter);
 	int last = 0;
 	dv.ele_count = 0;
 	bool run = true;
@@ -124,7 +138,7 @@ Doc_Value FileLoader::storeElements(std::string& n, Doc_Value dv)
 	while (run)
 	{
 		//first = n.find("*", first);
-		last = n.find("*", first + 1);
+		last = n.find(delimiter, first + 1);
 
 		if (last == std::string::npos) 
 		{

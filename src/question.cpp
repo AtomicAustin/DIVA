@@ -7,14 +7,24 @@ Question::Question()
     questions[2] = "[Replace] delimiter with: ";
     questions[3] = "Save to a new file? ";
     questions[4] = "Enter a file name to [save] to: ";
- 
+	filepath = "NOPATH";
+}
+Question::Question(std::string filePath)
+{
+	questions[0] = "Enter [File name]: ";
+	questions[1] = "Enter [Delimiter]: ";
+	questions[2] = "[Replace] delimiter with: ";
+	questions[3] = "Save to a new file? ";
+	questions[4] = "Enter a file name to [save] to: ";
+
+	filepath = filePath;
 }
 std::string Question::pollQuestion(spltr::QuesState cur)
 {
 	std::string new_answer = "";
 
 	curMode.resetColor();
-	std::cout << questions[cur];
+	std::cout << "(Home)>(Splitter) " + questions[cur];
 
 	curMode.setColor("CYAN");
 	getline(std::cin, new_answer);
@@ -40,13 +50,11 @@ bool Question::validateData(spltr::QuesState cur, std::string& u_data)
             }
             else{   u_data += ".txt";}
 
-            if(u_data.substr(0, 6) != "files/"){
-                u_data = "files/" + u_data;
-            }
+//			std::cout << u_data << std::endl;
 
             if(cur == spltr::O_FN)
             {
-                std::ifstream try_file(u_data.c_str());
+                std::ifstream try_file(stripSpaces(filepath) + stripSpaces(u_data));
 
                 if(try_file.is_open())
                 {
@@ -54,7 +62,7 @@ bool Question::validateData(spltr::QuesState cur, std::string& u_data)
                     return true;
                 }
                 else{
-                    curMode.ovrd_color("RED", "Filename failed.");
+                    curMode.ovrd_color("RED", "Filename [" + stripSpaces(filepath) + "][" + stripSpaces(u_data) + "]" + " failed.");
                 }
             }
             else{
@@ -99,4 +107,7 @@ bool Question::validateData(spltr::QuesState cur, std::string& u_data)
 
     return false;
 }
-
+void Question::setFilePath(std::string n_path)
+{
+	filepath = n_path;
+}

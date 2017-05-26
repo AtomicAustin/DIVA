@@ -6,37 +6,63 @@ Splitter::Splitter()
 	cur = spltr::O_FN;
 	data.sfn = "NOSTRING";
 }
-void Splitter::run(Command* in_cmd)
+Splitter::Splitter(std::string filePath)
 {
+	filepath = filePath;
+	nQues.setFilePath(filePath);
+	cur = spltr::O_FN;
+	data.sfn = "NOSTRING";
+}
+std::string Splitter::run(Command* in_cmd)
+{
+	std::string ret_str = "NOSTRING";
+
     displayFront();
 
 	m_cmd = in_cmd;
     m_cmd->changeState(SPLITTER);
 
-	pollQuestion();
+	ret_str = pollQuestion();
 
 	m_cmd->changeState(MAIN);
 
+	return ret_str;
 }
-void Splitter::pollQuestion()
+std::string Splitter::pollQuestion()
 {
 	while (cur < 5)
 	{
 		std::string user_answer = nQues.pollQuestion(cur);
 
-		if (checkCommand(user_answer))
+		switch (m_cmd->sendCommand(user_answer))
+		{
+			case -2: { return user_answer.substr(1, user_answer.length() - 1); }
+			case 1: { curMode.ovrd_color("YELLOW", "Ending Splitter"); return "NOSTRING"; }
+			case 2: { clearData(); cur = spltr::O_FN; continue; }
+			case 3: { previousState(); continue; }
+			case 4: { displayAbout(); continue; }
+			case 5: { m_cmd->displayCommands(); continue; }
+			case 6: { filepath = m_cmd->getFilePath(); nQues.setFilePath(filepath); continue; }
+		}
+
+
+		/*if (checkCommand(user_answer))
 		{
 			if (m_cmd->getCommandCode() == 1) 
 			{
 				curMode.ovrd_color("YELLOW", "Ending Splitter");
-				return;
+				return "NOSTRING";
+			}
+			else if (m_cmd->getCommandCode() == -2){
+				return user_answer.substr(1, user_answer.length() - 1);
 			}
 			else {
 				continue;
 			}
-		}
+		}*/
+		user_answer = stripSpaces(user_answer);
 
-		if (nQues.validateData(cur, user_answer)) 
+		if (nQues.validateData(cur, user_answer))
 		{
 			placeData(user_answer);
 			nextState(); 
@@ -55,6 +81,7 @@ bool Splitter::checkCommand(std::string u_answer)
 {
 	switch (m_cmd->sendCommand(u_answer))
 	{
+		case -2: { return true; }
 		case 1: { return true; }
 		case 2: { clearData(); cur = spltr::O_FN; return true; }
 		case 3: { previousState(); return true; }
@@ -130,6 +157,7 @@ void Splitter::placeData(std::string u_data)
 		case spltr::YN :
 		{
 			if (u_data != "y") {
+				std::cout << "YN answer: " << u_data << std::endl;
 				cur = spltr::S_FN;
 			}
 			break;
@@ -152,11 +180,11 @@ bool Splitter::split(spltr::Data inp)
 	std::string line;
 	std::string finalLine = "";
 	std::string newline;
-	std::ifstream rfile(inp.ofn.c_str());
+	std::ifstream rfile(stripSpaces(filepath) + stripSpaces(inp.ofn));
 	std::ofstream sfile;
 
 	if (inp.sfn != "NOSTRING") {
-		sfile.open(inp.sfn.c_str());
+		sfile.open(stripSpaces(filepath) + stripSpaces(inp.sfn));
 	}
 
 	if (rfile.is_open())
@@ -235,18 +263,18 @@ std::string Splitter::insertLinenums(std::string to_print)
 }
 void Splitter::displayFront()
 {
+	curMode.ovrd_color("PURPLE", "\n\t::Line Splitter::");
+	
 	curMode.setColor("YELLOW");
-	
-	std::cout << "\t~~Line Splitter~~" << std::endl;
-	std::cout << "For a list of commands, type /command" << std::endl;
-	std::cout << "For a description of this tool, type /about" << std::endl;
-	
+	std::cout << "For a list of commands, type "; curMode.ovrd_color("GREEN", "/command", false); std::cout << "." << std::endl;
+	std::cout << "For a description of this tool, type "; curMode.ovrd_color("GREEN", "/about", false); std::cout << ". \n" << std::endl;
 	curMode.resetColor();
 }
 void Splitter::displayAbout()
 {
+	curMode.ovrd_color("GREEN", "---------------------------------------------");
+	curMode.ovrd_color("PURPLE", "About:");
 	curMode.setColor("YELLOW");
-
 	std::cout <<
 		"The Line Splitter Tool is used for EDI documents that need to be broken up into " <<
 		"lines for better readability. \n" <<
@@ -257,10 +285,7 @@ void Splitter::displayAbout()
 		"result.  \n" <<
 		"Currently, escape sequences are not supported as a delimiter or a character to\n" <<
 		"replace with BESIDES the newline character '\\n' \n" <<
-		"\t-Austin Herman \n" <<
-		"Any suggestions, comments, or bugs can be sent to austin.herman@valvoline.com,\n" <<
-		"all feedback is welcome." <<
-		std::endl;
-
+	std::endl;
 	curMode.resetColor();
+	curMode.ovrd_color("GREEN", "---------------------------------------------");
 }
