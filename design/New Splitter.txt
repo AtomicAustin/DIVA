@@ -1,0 +1,28 @@
+Splitter 2.0
+
+	The easiest way to use Splitter is using the "split [filename]" command. It will load the file, find it's delimiter 
+and split it automatically. Once split it will save as [filename](x).txt where x is copies of file name + 1.
+	Advanced commands are available as well.
+
+BASIC:
+ .split [file]				//split [file]
+ .load [file]				//load [file]
+ .display				//display the current loaded file
+ .save					//save loaded file
+ .save as [filename]			//save loaded file as [filename] 
+---------------------------------------------------------------------------------------
+ADVANCED:
+ .load [file] -[delimiter],[rplwth]	//load [file] and set delimiter / replace with
+ .delimiter = [delimiter]		//set delimiter
+ .d = [delimiter]			//set delimiter
+ .replace with = [rplwth] 		//set replace with
+ .r = [rplwth]				//set replace with
+ .split -[delimiter],[rplwth]		//set delimiter / replace with and split
+---------------------------------------------------------------------------------------
+
+-ISA's are fixed length. The 4th character is the element delimiter, the last character is the segment delimiter. Save these 
+each time a file is loaded.
+-Spaces in commands don't matter, check for command key word first. Use strip spaces everywhere
+-File paths are messy still -- use the windows GUI to get file paths
+-After splitting, tell user "[filename] saved to {filepath} - use 'Display' to view file in window."
+-Save loaded file in a display vector

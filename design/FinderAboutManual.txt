@@ -5,11 +5,10 @@ elements/segments as defined by the X12 EDI standard or known elements/segments
 contained in the document you loaded.
 For example, if you want to examine an 810 invoice, simply load the 810, then 
 search for any values you want by definition or file values.
-Acceptable Queries include:
-find N9		*Returns the full line of all instances of the ISA segment*
-find CUR > USD 	*will look only at the CUR segment for the USD value*
-find Date Time Reference *Will return the library definitions as defined by the
-X12 EDI standard*
+You must include certain settings when executing commands, please refer to the 
+finder manual for info.
+Your file must be split by a newline character as well, if it's not you can
+use the Splitter tool.
 
 ::Finder Manual::
 The finder tool has two main commands - Load and Find.
@@ -18,9 +17,10 @@ Find will search the loaded document for a value or definition
 Both commands have settings the user may invoke, all settings must begin with
 the '-' character.
 
-load [filename] -[810/850]
-	.The load command's setting is MANDATORY - you will recieve an error 
-	 if it's not included.
+load [filename] -[810/850] -[special character]
+	.The load command's setting is MANDATORY
+	.The special character setting defines what delimiter splits each element
+	 in your document. This is the "*" by default
 	.As of now, all documents to load must be .txt files.
 
 find [value/definition] -[(a)ll/(m)ore/(s)imple] -[#]

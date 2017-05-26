@@ -1,0 +1,43 @@
+Finder 2.0
+
+Easiest way to use finder is by using the 'load [filename]' and 'find [value]'. The load command will load the given file,
+use it's element and segment delimiter to store its elements and find it's library from the ST segment and load that as well.
+The find command will parse through both documents and store whatever results it finds.
+
+--------------------------------------------------------------------------
+BASIC:
+load [filename]		//load file and it's library
+find [value]		//find a value in the file / library
+display			//display all results
+save 			//save results to a file
+save as	[filename]	//save to a filename
+---------------------------------------------------------------------------
+ADVANCED:
+load [filename] -[810/850]			//load with given settings
+find [value/definition] -[all/more/simple] -[#]	//find with given settings
+library [number]				//load a certain library
+display [all/more/simple]			//display setting
+display [#]					//number to display
+---------------------------------------------------------------------------
+
+
+-ST segment first element is the library, us that to load the correct library.
+-4th character of ISA is the element delimiter use that
+-If the library doesn't exist then pass loading a library, notify user
+-automatically display simple results on find
+
+Searching for an element:
+	
+	Found (x) result(s):
+	SEG*element1*[greencolor](queried element)*element3*...
+	Line #(number), Element #(number) 
+	Library Definition: (definition)
+	----------------------------------
+
+Searching for a segment:
+
+	Found (x) result(s):
+	[greencolor]SEG*element1*element2*element3*...
+	Line #(number) 
+	Library Definition: (definition)
+	----------------------------------

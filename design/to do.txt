@@ -1,3 +1,35 @@
 		**TO DO**
-type up 810/856/855 libraries
-make string loader
+data validation -- wait until deploy
+
+have program load files from a windows GUI -- if this is doable within a week or so
+
+re-do splitter input system to a command system: -- wait until deploy
+ .load [file]				//load the file given it's file name
+ .load [file] -[delimiter],[rplwth]	//load the file and set it's delimiter/rplwth if known
+ .delimiter = [delimiter]		//set the delimiter
+ .d = [delimiter]			//simpler delimiter set
+ .replace with = [rplwth] 		//set the rplwth
+ .r = [rplwth]				//simpler rplwth set
+ .replace [delimiter] with [rplwth]	//another way to set delimiter/rplwth values
+ .display				//display the current loaded file
+ .save					//save the current loaded file -- need to hold on to the loaded file somehow
+ .save as [filename]			//save the current loaded file to a new file
+ .split					//split the file
+ .split -[delimiter],[rplwth]		//split given delim/rplwth values
+
+change the delimiter in finder
+splitter ~ to * on an already split file removes newline characters
+
+User Friendlyness:
+A lot of issues figuring out commands and how to work the program. Commands were not intuitive and the learning process
+makes using the utility not worth it.
+
+ISA's are fixed length. The 4th character is the element delimiter, the last character is the delimiter. Save these each time 
+a file is loaded.
+
+Finder:
+load [file] -[library] -[element delimiter]
+find [value/definition] -[all/more/simple] -[number to return]
+
+ST segment first element is the library, us that to load the correct library.
+If the library doesn't exist then pass loading a library, notify user

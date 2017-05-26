@@ -1,0 +1,14 @@
+DIVA IDEAS:
+
+Password Generator
+	-this tool can generate a password given certain password requirements and a 
+	 complexity setting
+ .Password Database?
+   -Stores passwords for user -- probably won't happen
+
+Daily report generator
+	-Generates a daily report to be sent to Ecomm
+	-Given the 160/610 error, EDI file, and document information
+	-Puts the error description formatted for Ecomm to understand, can compile
+	multiple errors into one table to be exported at the end of the day
+	-possible get SMTP permissions and automatically send the report to ecom
