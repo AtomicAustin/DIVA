@@ -6,6 +6,8 @@
 *** 3/23/2017  big changes to integrate with full ***
 ***            DIVA solution                      ***
 *** 3/28/2017  changed color mode / command input ***
+*** 5/02/2017  Fixed formatting/colors            ***
+*** 5/08/2017  Added filepath                     ***
 ****************************************************/
 
 #ifndef FINDER_H
@@ -13,9 +15,9 @@
 
 #include <iostream>
 #include <string>
-#include "DIVAlib\Types.h"
-#include "DIVAlib\ColorMode.h"
-#include "DIVAlib\Command.h"
+#include "Types.h"
+#include "ColorMode.h"
+#include "Command.h"
 #include "input_system.h"
 #include "search_system.h"
 
@@ -25,12 +27,15 @@ class Finder
 {
 public:
 	Finder();
-	void run(Command*);
+	Finder(std::string);
+	std::string run(Command*);
 	void displayFront();
 	void displayAbout();
 	void displayManual();
 
 private:
+	std::string filepath;
+	std::string ret_str;
 	ColorMode newmode;
 };
 

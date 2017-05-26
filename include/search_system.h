@@ -3,6 +3,7 @@
 *** Austin Herman - austin.herman@valvoline.com       ***
 ***     Updated:                                      ***
 ***	4/24/2017 Added element count to return results	  ***
+***	5/08/2017 Delimiter functionality				  ***
 ********************************************************/
 
 #ifndef SEARCH_SYSTEM_H
@@ -11,8 +12,8 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include "DIVAlib\Types.h"
-#include "DIVAlib\ColorMode.h"
+#include "Types.h"
+#include "ColorMode.h"
 #include "fileloader.h"
 
 using namespace fndr;
@@ -51,6 +52,7 @@ private:
 	std::vector<Doc_Value> file_data;
 
 	std::vector<Found_Value> to_return;
+	std::string disp_delimiter;
 };
 
 #endif // SEARCH_SYSTEM_H

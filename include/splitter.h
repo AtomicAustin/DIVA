@@ -1,4 +1,4 @@
-/********************************************************
+/*******************************************************\
 ***      D.I.V.A : Line Splitter BETA                 ***
 *** Austin Herman - austin.herman@valvoline.com       ***
 *** Started: 2/13/17         Finished: 2/15/17        ***
@@ -8,7 +8,8 @@
 *** 3/28/2017  fixed color mode, added input library  ***
 *** 3/31/2017  removed split another question, fixed  ***
 ***  issue with \n as delimiter                       ***
-********************************************************/
+*** 5/08/2017 added filepath                          ***
+\*******************************************************/
 
 #ifndef SPLITTER_H
 #define SPLITTER_H
@@ -18,16 +19,17 @@
 #include <string>
 #include <stdio.h>
 #include "question.h"
-#include "DIVAlib\ColorMode.h"
-#include "DIVAlib\Command.h"
-#include "DIVAlib\Types.h"
+#include "ColorMode.h"
+#include "Command.h"
+#include "Types.h"
 
 class Splitter
 {
 public:
     Splitter();
-    void run(Command*);
-	void pollQuestion();
+	Splitter(std::string);
+    std::string run(Command*);
+	std::string pollQuestion();
 	bool checkCommand(std::string);
 	void nextState();
 	void previousState();
@@ -40,6 +42,8 @@ public:
 	void displayFront();
 
 private:
+	std::string filepath;
+
 	Command* m_cmd;
 	ColorMode curMode;
 	spltr::QuesState cur;

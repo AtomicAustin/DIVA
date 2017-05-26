@@ -2,7 +2,8 @@
 ***        D.I.V.A : File Loader BETA                 ***
 *** Austin Herman - austin.herman@valvoline.com       ***
 ***     Updated:                                      ***
-***													  ***
+***	5/08/2017  Delimiter functionality				  ***
+*** 5/08/2017 added filepath                          ***
 ********************************************************/
 
 #ifndef FILELOADER_H
@@ -11,8 +12,8 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include "DIVAlib\Types.h"
-#include "DIVAlib\ColorMode.h"
+#include "Types.h"
+#include "ColorMode.h"
 
 using namespace fndr;
 
@@ -32,9 +33,14 @@ protected:
 private:
 	ColorMode curColor;
 
-	std::string _850library;
 	std::string _810library;
+	std::string _850library;
+	std::string _855library;
+	std::string _856library;
+	std::string _857library;
 	std::string ufile;
+
+	std::string delimiter;
 };
 
 #endif // FILELOADER_H
